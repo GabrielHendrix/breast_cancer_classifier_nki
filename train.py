@@ -5,12 +5,12 @@ import tensorflow as tf
 
 class Train:
     def __init__(self, X, X_train, X_test, y_train, y_test, init_lr, lr_decay, end_lr, step_size, epochs):
-
         self.X          = X
         self.X_train    = X_train
         self.X_test     = X_test
         self.y_train    = y_train
         self.y_test     = y_test
+
         # Parâmetros da learning rate
         self.init_lr    = init_lr   # 0.001
         self.lr_decay   = lr_decay  # 2.0

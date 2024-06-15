@@ -9,14 +9,13 @@ import os
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--test',       type=bool,  default=False,  help='')
     parser.add_argument('--kfold',      type=int,   default=1,      help='Numero de folds para a validação cruzada')
-    parser.add_argument('--input_path', type=str,   default=None,   help='Caminho para o diretorio que contem os dados salvos do treino a ser analisado')  # file/folder, 0 for webcam
-    parser.add_argument('--init_lr',    type=float, default=0.001,  help='Caminho para o diretorio que contem os dados salvos do treino a ser analisado')  # file/folder, 0 for webcam
-    parser.add_argument('--end_lr',     type=float, default=0.0001, help='Caminho para o diretorio que contem os dados salvos do treino a ser analisado')  # file/folder, 0 for webcam
-    parser.add_argument('--lr_decay',   type=float, default=2.000,  help='Caminho para o diretorio que contem os dados salvos do treino a ser analisado')  # file/folder, 0 for webcam
-    parser.add_argument('--step_size',  type=int,   default=100,    help='Caminho para o diretorio que contem os dados salvos do treino a ser analisado')  # file/folder, 0 for webcam
-    parser.add_argument('--epochs',     type=int,   default=5000,   help='Caminho para o diretorio que contem os dados salvos do treino a ser analisado')  # file/folder, 0 for webcam
+    parser.add_argument('--input_path', type=str,   default=None,   help='Caminho para o diretorio que contem os dados salvos do treino a ser analisado')
+    parser.add_argument('--init_lr',    type=float, default=0.001,  help='Valor da taxa de aprendizado inicial')
+    parser.add_argument('--end_lr',     type=float, default=0.0001, help='Valor da taxa de aprendizado inicial')
+    parser.add_argument('--lr_decay',   type=float, default=2.000,  help='Taxa de decaimento (learning_rate / learning_rate_decay)')
+    parser.add_argument('--step_size',  type=int,   default=100,    help='Define o numero de epocas que devem ser acumuladas para aplicar um decaimento sobre o learning_rate')
+    parser.add_argument('--epochs',     type=int,   default=5000,   help='Numero maximo de epocas')
     opt = parser.parse_args()
 
     output_path = os.path.join('checkpoints', strftime("%y%m%d_%H%M%S", localtime()))
@@ -63,7 +62,7 @@ def main():
         model.save(os.path.join(input_path, 'model.h5'))
         
         # Calcula a matriz de confusao e as metricas precision, recall, f1-score e AUC-ROC
-        e.model_evaluate(model, d.X_train[i], d.X_test[i], d.y_train[i], d.y_test[i], i, input_path)
+        e.model_evaluate(model, d.X_train[i], d.X_test[i], d.y_train[i], d.y_test[i], -1, input_path)
 
     e.plot_metrics(histories, output_path)
 
