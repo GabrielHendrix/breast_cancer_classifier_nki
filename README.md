@@ -1,6 +1,6 @@
 # Módulo de Treinamento e Avaliação de Dados NKI
 
-### Este módulo fornece uma estrutura para carregar, treinar e avaliar modelos de aprendizado de máquina no conjunto de dados NKI usando TensorFlow/Keras. Inclui funcionalidades para pré-processamento de dados, treinamento de modelos com agendamento de taxa de aprendizado e parada antecipada, e avaliação com várias métricas.
+**Este módulo fornece uma estrutura para carregar, treinar e avaliar modelos de aprendizado de máquina no conjunto de dados NKI usando TensorFlow/Keras. Inclui funcionalidades para pré-processamento de dados, treinamento de modelos com agendamento de taxa de aprendizado e parada antecipada, e avaliação com várias métricas.**
 
 ## Índice
 
