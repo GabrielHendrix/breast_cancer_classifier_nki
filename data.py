@@ -3,6 +3,9 @@ from yellowbrick.features.pcoords import ParallelCoordinates
 from sklearn.preprocessing import StandardScaler
 from yellowbrick.features.radviz import RadViz 
 from yellowbrick.features.rankd import Rank2D 
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import os
@@ -90,7 +93,41 @@ class Data:
 
     def split_data(self):
         # Divide entre treino e teste
-        X_train, X_test, y_train, y_test = train_test_split(self.X, self.y, test_size=0.2, random_state=42)
+        # X_train, X_test, y_train, y_test = train_test_split(self.X, self.y, test_size=0.2, random_state=42)
+        
+        # Aplicar KMeans para agrupar os dados
+        kmeans = KMeans(n_clusters=13, random_state=42)
+        clusters = kmeans.fit_predict(self.X)
+        distances = kmeans.transform(self.X)
+        
+        # # Visualizar os clusters usando PCA para redução de dimensionalidade
+        # pca = PCA(n_components=2)
+        # X_pca = pca.fit_transform(self.X)
+
+        # plt.figure(figsize=(10, 7))
+        # unique_labels = np.unique(clusters)
+        # for label in unique_labels:
+        #     plt.scatter(X_pca[clusters == label, 0], X_pca[clusters == label, 1], label=f'Cluster {label}')
+        # plt.title('Clusters formados pelo KMeans')
+        # plt.xlabel('Componente Principal 1')
+        # plt.ylabel('Componente Principal 2')
+        # plt.legend()
+        # plt.savefig(os.path.join(self.output_path, 'clusters.png'))
+        # plt.show()
+
+        # Ordenar os dados com base na distância ao centro do cluster
+        sorted_indices = np.argsort(np.min(distances, axis=1))
+
+        # Selecionar os dados mais próximos ao centro dos clusters para treino
+        train_size = int(0.8 * len(self.X))
+        train_indices = sorted_indices[:train_size]
+        test_indices = sorted_indices[train_size:]
+
+        X_train = self.X[train_indices]
+        X_test = self.X[test_indices]
+        y_train = self.y.iloc[train_indices]
+        y_test = self.y.iloc[test_indices]
+
 
         pd.DataFrame(X_train).to_parquet(os.path.join(self.output_path, 'X_train.parquet'))
         pd.DataFrame(X_test).to_parquet(os.path.join(self.output_path, 'X_test.parquet'))
