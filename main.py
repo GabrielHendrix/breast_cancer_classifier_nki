@@ -16,6 +16,7 @@ def main():
     parser.add_argument('--lr_decay',   type=float, default=2.000,  help='Taxa de decaimento (learning_rate / learning_rate_decay)')
     parser.add_argument('--step_size',  type=int,   default=100,    help='Define o numero de epocas que devem ser acumuladas para aplicar um decaimento sobre o learning_rate')
     parser.add_argument('--epochs',     type=int,   default=5000,   help='Numero maximo de epocas')
+    parser.add_argument('--bad_train',  type=bool,  default=False,   help='Habilita a formacao de um conjuntos de dados ruim para testes')
     opt = parser.parse_args()
 
     output_path = os.path.join('checkpoints', strftime("%y%m%d_%H%M%S", localtime()))
@@ -32,7 +33,7 @@ def main():
         if (opt.kfold > 1):
             d.split_kfold_data(opt.kfold)
         else:
-            d.split_data()
+            d.split_data(opt.bad_train)
 
     d.load_splitted_datasets(input_path)  
     e = evaluate.Evaluate()
